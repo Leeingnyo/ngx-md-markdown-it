@@ -7,5 +7,6 @@ export declare class NgxMdService {
     getContent(path: string): Observable<any>;
     setMarkedOptions(options: any): void;
     compile(data: string): any;
+    private extendRenderer();
     private handleError(error);
 }
