@@ -1,3 +1,4 @@
+import { __spread } from 'tslib';
 import { throwError } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import MarkdownIt from 'markdown-it';
@@ -33,6 +34,16 @@ var NgxMdService = /** @class */ (function () {
         return this._http.get(path, { responseType: 'text' })
             .pipe(map(function (res) { return res; }), catchError(this.handleError));
     };
+    Object.defineProperty(NgxMdService.prototype, "renderer", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this._renderer;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @param {?} options
      * @return {?}
@@ -65,27 +76,31 @@ var NgxMdService = /** @class */ (function () {
         return this._renderer.render(data);
     };
     /**
+     * @param {?} plugin
+     * @param {...?} opts
+     * @return {?}
+     */
+    NgxMdService.prototype.loadPlugin = /**
+     * @param {?} plugin
+     * @param {...?} opts
+     * @return {?}
+     */
+    function (plugin) {
+        var opts = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            opts[_i - 1] = arguments[_i];
+        }
+        var _a;
+        this._renderer = (_a = this._renderer).use.apply(_a, __spread([plugin], opts));
+        return this;
+    };
+    /**
      * @return {?}
      */
     NgxMdService.prototype.extendRenderer = /**
      * @return {?}
      */
     function () {
-        /** @type {?} */
-        var defaultRender = this._renderer.renderer.rules.link_open || function (tokens, idx, options, env, self) {
-            return self.renderToken(tokens, idx, options);
-        };
-        this._renderer.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-            /** @type {?} */
-            var aIndex = tokens[idx].attrIndex('target');
-            if (aIndex < 0) {
-                tokens[idx].attrPush(['target', '_blank']);
-            }
-            else {
-                tokens[idx].attrs[aIndex][1] = '_blank';
-            }
-            return defaultRender(tokens, idx, options, env, self);
-        };
         /** @type {?} */
         var currentPageLinkWithoutHash = location.origin + location.pathname + location.search;
         this._renderer.renderer.rules.footnote_ref = function render_footnote_ref(tokens, idx, options, env, slf) {

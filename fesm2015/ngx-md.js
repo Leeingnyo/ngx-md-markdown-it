@@ -33,6 +33,12 @@ class NgxMdService {
             .pipe(map(res => res), catchError(this.handleError));
     }
     /**
+     * @return {?}
+     */
+    get renderer() {
+        return this._renderer;
+    }
+    /**
      * @param {?} options
      * @return {?}
      */
@@ -56,24 +62,18 @@ class NgxMdService {
         return this._renderer.render(data);
     }
     /**
+     * @param {?} plugin
+     * @param {...?} opts
+     * @return {?}
+     */
+    loadPlugin(plugin, ...opts) {
+        this._renderer = this._renderer.use(plugin, ...opts);
+        return this;
+    }
+    /**
      * @return {?}
      */
     extendRenderer() {
-        /** @type {?} */
-        const defaultRender = this._renderer.renderer.rules.link_open || function (tokens, idx, options, env, self) {
-            return self.renderToken(tokens, idx, options);
-        };
-        this._renderer.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-            /** @type {?} */
-            const aIndex = tokens[idx].attrIndex('target');
-            if (aIndex < 0) {
-                tokens[idx].attrPush(['target', '_blank']);
-            }
-            else {
-                tokens[idx].attrs[aIndex][1] = '_blank';
-            }
-            return defaultRender(tokens, idx, options, env, self);
-        };
         /** @type {?} */
         const currentPageLinkWithoutHash = location.origin + location.pathname + location.search;
         this._renderer.renderer.rules.footnote_ref = function render_footnote_ref(tokens, idx, options, env, slf) {

@@ -7,6 +7,50 @@
     MarkdownIt = MarkdownIt && MarkdownIt.hasOwnProperty('default') ? MarkdownIt['default'] : MarkdownIt;
     MarkdownItFootnote = MarkdownItFootnote && MarkdownItFootnote.hasOwnProperty('default') ? MarkdownItFootnote['default'] : MarkdownItFootnote;
 
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+    function __read(o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m)
+            return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+                ar.push(r.value);
+        }
+        catch (error) {
+            e = { error: error };
+        }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"]))
+                    m.call(i);
+            }
+            finally {
+                if (e)
+                    throw e.error;
+            }
+        }
+        return ar;
+    }
+    function __spread() {
+        for (var ar = [], i = 0; i < arguments.length; i++)
+            ar = ar.concat(__read(arguments[i]));
+        return ar;
+    }
+
     /**
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
@@ -32,6 +76,15 @@
                 return this._http.get(path, { responseType: 'text' })
                     .pipe(operators.map(function (res) { return res; }), operators.catchError(this.handleError));
             };
+        Object.defineProperty(NgxMdService.prototype, "renderer", {
+            get: /**
+             * @return {?}
+             */ function () {
+                return this._renderer;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @param {?} options
          * @return {?}
@@ -64,27 +117,31 @@
                 return this._renderer.render(data);
             };
         /**
+         * @param {?} plugin
+         * @param {...?} opts
+         * @return {?}
+         */
+        NgxMdService.prototype.loadPlugin = /**
+         * @param {?} plugin
+         * @param {...?} opts
+         * @return {?}
+         */
+            function (plugin) {
+                var opts = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    opts[_i - 1] = arguments[_i];
+                }
+                var _a;
+                this._renderer = (_a = this._renderer).use.apply(_a, __spread([plugin], opts));
+                return this;
+            };
+        /**
          * @return {?}
          */
         NgxMdService.prototype.extendRenderer = /**
          * @return {?}
          */
             function () {
-                /** @type {?} */
-                var defaultRender = this._renderer.renderer.rules.link_open || function (tokens, idx, options, env, self) {
-                    return self.renderToken(tokens, idx, options);
-                };
-                this._renderer.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-                    /** @type {?} */
-                    var aIndex = tokens[idx].attrIndex('target');
-                    if (aIndex < 0) {
-                        tokens[idx].attrPush(['target', '_blank']);
-                    }
-                    else {
-                        tokens[idx].attrs[aIndex][1] = '_blank';
-                    }
-                    return defaultRender(tokens, idx, options, env, self);
-                };
                 /** @type {?} */
                 var currentPageLinkWithoutHash = location.origin + location.pathname + location.search;
                 this._renderer.renderer.rules.footnote_ref = function render_footnote_ref(tokens, idx, options, env, slf) {
