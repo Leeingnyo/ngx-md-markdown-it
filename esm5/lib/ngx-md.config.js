@@ -7,7 +7,7 @@ var NgxMdConfig = /** @class */ (function () {
     function NgxMdConfig() {
     }
     NgxMdConfig.decorators = [
-        { type: Injectable },
+        { type: Injectable }
     ];
     return NgxMdConfig;
 }());

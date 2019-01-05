@@ -1,17 +1,23 @@
-import { ElementRef, AfterViewInit } from '@angular/core';
+import { ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { NgxMdService } from './ngx-md.service';
 export declare class NgxMdComponent implements AfterViewInit {
-    private _mdService;
-    private _el;
-    private platformId;
-    private _path;
-    private _data;
-    private _md;
-    private _ext;
+    _mdService: NgxMdService;
+    _el: ElementRef;
+    platformId: string;
+    _path: string;
+    _data: string;
+    _md: any;
+    _ext: string;
     changeLog: string[];
+    errror: EventEmitter<any>;
+    loaded: EventEmitter<any>;
     constructor(_mdService: NgxMdService, _el: ElementRef, platformId: string);
     path: string;
     data: string;
+    /**
+     * Boolean indicating if the markdown content should be sanitized to avoid script injections
+     */
+    sanitizeHtml: boolean;
     onDataChange(data: string): void;
     /**
      *  After view init
@@ -25,7 +31,7 @@ export declare class NgxMdComponent implements AfterViewInit {
     /**
      * catch http error
      */
-    private handleError(error);
+    private handleError;
     /**
      * Prepare string
      */
@@ -33,9 +39,9 @@ export declare class NgxMdComponent implements AfterViewInit {
     /**
      * Trim left whitespace
      */
-    private trimLeft(line);
+    private trimLeft;
     /**
      * Use Prism to highlight code snippets only on the browser
      */
-    private highlightContent(async);
+    private highlightContent;
 }
